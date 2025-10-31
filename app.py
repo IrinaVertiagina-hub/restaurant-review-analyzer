@@ -92,31 +92,55 @@ def extract_aspect_sentences(text, aspect_words):
 #     return results
 
 
+def analyze_aspect_sentiment(text, aspect_words, vectorizer, model):
+    """Анализирует sentiment для конкретного аспекта"""
+    sentences = extract_aspect_sentences(text, aspect_words)
+    
+    if not sentences:
+        return None
+    
+    # Объединяем все предложения об аспекте
+    aspect_text = ' '.join(sentences)
+    
+    # 1. TF-IDF вектор
+    aspect_tfidf = vectorizer.transform([aspect_text])
+    
+    # 2. Дополнительные признаки
+    extra_features = pd.DataFrame({
+        'text_length': [len(aspect_text)],
+        'word_count': [len(aspect_text.split())],
+        'exclamation_count': [aspect_text.count('!')],
+        'question_count': [aspect_text.count('?')],
+        'capital_ratio': [sum(1 for c in aspect_text if c.isupper()) / len(aspect_text) if len(aspect_text) > 0 else 0],
+        'avg_word_length': [len(aspect_text) / len(aspect_text.split()) if len(aspect_text.split()) > 0 else 0]
+    })
+    
+    # 3. Объединяем
+    aspect_vector = hstack([aspect_tfidf, extra_features.values])
+    
+    # Предсказываем sentiment
+    sentiment = model.predict(aspect_vector)[0]
+    sentiment_proba = model.predict_proba(aspect_vector)[0]
+    
+    return {
+        'sentiment': sentiment,
+        'confidence': sentiment_proba[sentiment],
+        'text_sample': sentences[0] if sentences else ''
+    }
+
 def analyze_aspects(text, vectorizer, model, aspect_keywords):
+    """Анализирует все аспекты"""
     results = {}
     
-    # Сначала получим overall sentiment для сравнения
-    overall_pred, _ = predict_sentiment(text, vectorizer, model)
-    
     for aspect_name, keywords in aspect_keywords.items():
-        sentences = extract_aspect_sentences(text, keywords)
+        result = analyze_aspect_sentiment(text, keywords, vectorizer, model)
         
-        if sentences and len(sentences) > 0:
-            # Берём ВСЕ предложения про аспект + добавляем контекст
-            aspect_text = ' '.join(sentences)
-            
-            # ВАЖНО: анализируем только если есть достаточно текста
-            if len(aspect_text.split()) >= 3:  # минимум 3 слова
-                prediction, probs = predict_sentiment(aspect_text, vectorizer, model)
-                
-                results[aspect_name] = {
-                    'sentiment': 'Positive' if prediction == 1 else 'Negative',
-                    'confidence': probs[prediction],
-                    'sample': sentences[0] if sentences else ''
-                }
-            else:
-                # Если текста мало - не показываем аспект
-                continue
+        if result:
+            results[aspect_name] = {
+                'sentiment': 'Positive' if result['sentiment'] == 1 else 'Negative',
+                'confidence': result['confidence'],
+                'sample': result['text_sample']
+            }
     
     return results
 
@@ -240,3 +264,4 @@ with tab2:
 st.markdown("---")
 
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
+
