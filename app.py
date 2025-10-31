@@ -73,22 +73,51 @@ def extract_aspect_sentences(text, aspect_words):
     return relevant_sentences
 
 
+# def analyze_aspects(text, vectorizer, model, aspect_keywords):
+#     results = {}
+
+#     for aspect_name, keywords in aspect_keywords.items():
+#         sentences = extract_aspect_sentences(text, keywords)
+
+#         if sentences:
+#             aspect_text = ' '.join(sentences)
+#             prediction, probs = predict_sentiment(aspect_text, vectorizer, model)
+
+#             results[aspect_name] = {
+#                 'sentiment': 'Positive' if prediction == 1 else 'Negative',
+#                 'confidence': probs[prediction],
+#                 'sample': sentences[0] if sentences else ''
+#             }
+
+#     return results
+
+
 def analyze_aspects(text, vectorizer, model, aspect_keywords):
     results = {}
-
+    
+    # Сначала получим overall sentiment для сравнения
+    overall_pred, _ = predict_sentiment(text, vectorizer, model)
+    
     for aspect_name, keywords in aspect_keywords.items():
         sentences = extract_aspect_sentences(text, keywords)
-
-        if sentences:
+        
+        if sentences and len(sentences) > 0:
+            # Берём ВСЕ предложения про аспект + добавляем контекст
             aspect_text = ' '.join(sentences)
-            prediction, probs = predict_sentiment(aspect_text, vectorizer, model)
-
-            results[aspect_name] = {
-                'sentiment': 'Positive' if prediction == 1 else 'Negative',
-                'confidence': probs[prediction],
-                'sample': sentences[0] if sentences else ''
-            }
-
+            
+            # ВАЖНО: анализируем только если есть достаточно текста
+            if len(aspect_text.split()) >= 3:  # минимум 3 слова
+                prediction, probs = predict_sentiment(aspect_text, vectorizer, model)
+                
+                results[aspect_name] = {
+                    'sentiment': 'Positive' if prediction == 1 else 'Negative',
+                    'confidence': probs[prediction],
+                    'sample': sentences[0] if sentences else ''
+                }
+            else:
+                # Если текста мало - не показываем аспект
+                continue
+    
     return results
 
 
@@ -209,4 +238,5 @@ with tab2:
 
 # Footer
 st.markdown("---")
+
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
