@@ -19,7 +19,7 @@ def load_models():
     with open('models/tfidf_vectorizer.pkl', 'rb') as f:
         vectorizer = pickle.load(f)
     
-    with open('models/logistic_regression_baseline.pkl', 'rb') as f:
+    with open('models/logistic_regression_balanced.pkl', 'rb') as f:
         model = pickle.load(f)
     
     with open('models/aspect_keywords.pkl', 'rb') as f:
@@ -245,3 +245,4 @@ with tab2:
 # Footer
 st.markdown("---")
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
+
