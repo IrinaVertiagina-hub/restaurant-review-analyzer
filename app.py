@@ -259,10 +259,20 @@ with tab2:
     - **Aspect-Based Analysis**: Breaks down sentiment by Food, Service, Ambiance, and Price
     - **Confidence Scores**: Shows how certain the model is about its predictions
     
-    #### Model Performance
-    - **Accuracy**: 95.5% on 17,728 test reviews
-    - **Training Data**: 70,910 Yelp restaurant reviews
-    - **Algorithm**: Logistic Regression with TF-IDF features
+#### Model Performance
+- **Accuracy**: 94.1% on 17,728 test reviews
+- **Training Data**: 70,910 Yelp restaurant reviews
+- **Algorithm**: XGBoost with TF-IDF features + engineered features
+- **Features**: 5,006 features (5,000 TF-IDF + 6 text statistics)
+
+#### Model Comparison
+Tested multiple algorithms:
+- **XGBoost**: 94.1% - Best for aspect-level analysis with mixed sentiment
+- Logistic Regression: 95.5% - Best overall accuracy but struggled with short phrases
+- Random Forest: 91.7%
+- Naive Bayes: 83.5%
+
+*Selected XGBoost for superior performance on aspect extraction despite slightly lower overall accuracy.*
     
     #### Key Insights from Analysis
     - 📊 Price and Service are the most common complaint areas (22% and 21.7% negative)
@@ -281,6 +291,7 @@ with tab2:
 # Footer
 st.markdown("---")
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
+
 
 
 
