@@ -60,13 +60,49 @@ def predict_sentiment(text, vectorizer, model):
     return prediction, probabilities
 
 # Функция для извлечения предложений с аспектом
+# def extract_aspect_sentences(text, aspect_words):
+#     sentences = re.split(r'[.!?]+', text.lower())
+#     relevant_sentences = []
+#     for sentence in sentences:
+#         if any(word in sentence for word in aspect_words):
+#             relevant_sentences.append(sentence.strip())
+#     return relevant_sentences
 def extract_aspect_sentences(text, aspect_words):
-    sentences = re.split(r'[.!?]+', text.lower())
-    relevant_sentences = []
+    """Извлекает контекст вокруг аспекта, избегая противоположных мнений"""
+    text_lower = text.lower()
+    sentences = re.split(r'[.!?]+', text_lower)
+    relevant = []
+    
+    # Слова-разделители (but, however, although)
+    separators = ['but', 'however', 'although', 'though', 'yet']
+    
     for sentence in sentences:
-        if any(word in sentence for word in aspect_words):
-            relevant_sentences.append(sentence.strip())
-    return relevant_sentences
+        words = sentence.split()
+        
+        for i, word in enumerate(words):
+            if any(aspect_word in word for aspect_word in aspect_words):
+                # Найдём ближайший separator ПЕРЕД аспектом
+                separator_idx = -1
+                for j in range(i-1, -1, -1):
+                    if words[j] in separators:
+                        separator_idx = j
+                        break
+                
+                # Начинаем ПОСЛЕ separator (или с начала если separator нет)
+                start = max(0, separator_idx + 1)
+                
+                # Берём до конца или до следующего separator
+                end = len(words)
+                for j in range(i+1, len(words)):
+                    if words[j] in separators:
+                        end = j
+                        break
+                
+                context = ' '.join(words[start:end])
+                relevant.append(context.strip())
+                break
+    
+    return relevant
 
 # Функция для анализа sentiment конкретного аспекта (из Jupyter cell 19)
 def analyze_aspect_sentiment(text, aspect_words, vectorizer, model):
@@ -245,5 +281,6 @@ with tab2:
 # Footer
 st.markdown("---")
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
+
 
 
