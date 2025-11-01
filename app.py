@@ -169,7 +169,7 @@ st.markdown("### Analyze restaurant reviews with AI-powered sentiment analysis")
 # Sidebar с информацией о модели
 with st.sidebar:
     st.header("📊 Model Information")
-    st.metric("Accuracy", f"{metadata['baseline_accuracy']*100:.1f}%")
+    st.metric("Accuracy (XGBoost)", "94.1%")
     st.metric("Training Samples", f"{metadata['training_samples']:,}")
     st.metric("Features", metadata['features'])
     st.markdown("---")
@@ -291,6 +291,7 @@ Tested multiple algorithms:
 # Footer
 st.markdown("---")
 st.markdown("*Restaurant Review Analyzer • Built by Irina Vertiagina*")
+
 
 
 
