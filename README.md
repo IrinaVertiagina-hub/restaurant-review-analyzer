@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/23374837/README.md)
-\# 🍽️ Restaurant Review Sentiment Analyzer
+# 🍽️ Restaurant Review Sentiment Analyzer
 
 
 
@@ -7,21 +7,7 @@ An AI-powered sentiment analysis tool that classifies restaurant reviews and pro
 
 
 
-\[!\[Streamlit App] https://restaurant-review-analyzer.streamlit.app/
-
-!\[Python](https://img.shields.io/badge/python-3.8+-blue.svg)
-
-!\[scikit-learn](https://img.shields.io/badge/scikit--learn-1.3.0-orange.svg)
-
-!\[License](https://img.shields.io/badge/license-MIT-green.svg)
-
-
-
----
-
-
-
-\## Project Overview
+## Project Overview
 
 
 
