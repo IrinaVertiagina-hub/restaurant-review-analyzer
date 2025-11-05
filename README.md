@@ -13,23 +13,14 @@ An AI-powered sentiment analysis tool that classifies restaurant reviews and pro
 
 This machine learning project analyzes restaurant reviews to:
 
-**Classify overall sentiment\*\* (Positive/Negative) with 94.1% accuracy
+Classify overall sentiment (Positive/Negative) with 94.1% accuracy
 
-\- \*\*Break down sentiment by aspect\*\*: Food, Service, Ambiance, and Price
+Break down sentiment by aspect: Food, Service, Ambiance, and Price
 
-\- \*\*Provide actionable business insights\*\* for restaurant owners
-
-
-
-\*\*Live Demo:\*\* \[Try it here](YOUR\_STREAMLIT\_LINK\_HERE)
+Provide actionable business insights for restaurant owners
 
 
-
----
-
-
-
-\##  Key Features
+##  Key Features
 
 
 
@@ -42,11 +33,6 @@ This machine learning project analyzes restaurant reviews to:
 \-  \*\*Production-Ready\*\*: Deployed web application with interactive UI
 
 \-  \*\*Smart Context Handling\*\*: Detects contrast words (but, however) for mixed sentiment reviews
-
-
-
----
-
 
 
 \## 📈 Results \& Performance
